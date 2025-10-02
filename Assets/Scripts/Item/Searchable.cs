@@ -3,18 +3,32 @@ using System.Collections.Generic;
 
 public class Searchable : MonoBehaviour, IInteractable
 {
-    [Header("Item Pool (ScriptableObjects or Prefabs)")]
+    public enum SearchMode
+    {
+        FixedCount,
+        Chance
+    }
+
+    [Header("Item Pool (Prefabs or ScriptableObjects)")]
     public List<GameObject> possibleItems;
-    public Transform spawnPoint;
+    public Transform[] spawnPoints;
 
     [Header("Search Settings")]
-    public int maxSearches = 1;
-    public float chanceToSpawn = 1f;
+    public int maxSearches = 3;
+    public SearchMode searchMode = SearchMode.FixedCount;
+
+    [Tooltip("ใช้เมื่อ SearchMode = FixedCount")]
+    public int maxSpawns = 1;
+
+    [Tooltip("ใช้เมื่อ SearchMode = Chance (0-1)")]
+    [Range(0f, 1f)]
+    public float chanceToSpawn = 0.5f;
+
     public bool allowDuplicates = true;
 
     private int currentSearchCount = 0;
+    private int currentSpawnCount = 0;
     private List<GameObject> remainingItems;
-    private GameObject spawnedItem = null;
 
     private void Awake()
     {
@@ -32,7 +46,19 @@ public class Searchable : MonoBehaviour, IInteractable
 
         currentSearchCount++;
 
-        if (Random.value <= chanceToSpawn && possibleItems.Count > 0)
+        bool shouldSpawn = false;
+
+        if (searchMode == SearchMode.FixedCount)
+        {
+            if (currentSpawnCount < maxSpawns)
+                shouldSpawn = true;
+        }
+        else if (searchMode == SearchMode.Chance)
+        {
+            shouldSpawn = (Random.value <= chanceToSpawn);
+        }
+
+        if (shouldSpawn && possibleItems.Count > 0)
         {
             GameObject itemToSpawn = null;
 
@@ -54,8 +80,13 @@ public class Searchable : MonoBehaviour, IInteractable
                 remainingItems.RemoveAt(index);
             }
 
-            spawnedItem = Instantiate(itemToSpawn, spawnPoint.position, Quaternion.identity);
-            Debug.Log($"Searched! Item spawned: {spawnedItem.name}");
+            Transform spawnPoint = spawnPoints.Length > 0 ?
+                spawnPoints[Random.Range(0, spawnPoints.Length)] : transform;
+
+            Instantiate(itemToSpawn, spawnPoint.position, Quaternion.identity);
+            currentSpawnCount++;
+
+            Debug.Log($"Searched! Item spawned: {itemToSpawn.name}");
         }
         else
         {

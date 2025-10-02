@@ -104,7 +104,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 37dc4250ba2adcf4fb194ce7e570d69f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Key
-  keyID: 2
+  keyID: 1
   keyName: Prefabs02
 --- !u!61 &1455755253564552847
 BoxCollider2D:
