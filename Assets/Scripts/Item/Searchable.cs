@@ -7,34 +7,59 @@ public class Searchable : MonoBehaviour, IInteractable
     public List<GameObject> possibleItems;
     public Transform spawnPoint;
 
+    [Header("Search Settings")]
+    public int maxSearches = 1;
+    public float chanceToSpawn = 1f;
+    public bool allowDuplicates = true;
+
+    private int currentSearchCount = 0;
+    private List<GameObject> remainingItems;
     private GameObject spawnedItem = null;
-    private bool hasSearched = false;
+
+    private void Awake()
+    {
+        if (!allowDuplicates)
+            remainingItems = new List<GameObject>(possibleItems);
+    }
 
     public void OnInteract(PlayerController player)
     {
-        if (!hasSearched)
+        if (currentSearchCount >= maxSearches)
         {
-            if (possibleItems.Count > 0)
+            Debug.Log("No more searches allowed.");
+            return;
+        }
+
+        currentSearchCount++;
+
+        if (Random.value <= chanceToSpawn && possibleItems.Count > 0)
+        {
+            GameObject itemToSpawn = null;
+
+            if (allowDuplicates)
             {
                 int index = Random.Range(0, possibleItems.Count);
-                spawnedItem = Instantiate(possibleItems[index], spawnPoint.position, Quaternion.identity);
+                itemToSpawn = possibleItems[index];
+            }
+            else
+            {
+                if (remainingItems.Count == 0)
+                {
+                    Debug.Log("No items left to spawn.");
+                    return;
+                }
+
+                int index = Random.Range(0, remainingItems.Count);
+                itemToSpawn = remainingItems[index];
+                remainingItems.RemoveAt(index);
             }
 
-            hasSearched = true;
-            Debug.Log("Searched! Item spawned");
-        }
-        else if (spawnedItem != null)
-        {
-            var pickup = spawnedItem.GetComponent<IInteractable>();
-            if (pickup != null)
-            {
-                pickup.OnInteract(player);
-                spawnedItem = null;
-            }
+            spawnedItem = Instantiate(itemToSpawn, spawnPoint.position, Quaternion.identity);
+            Debug.Log($"Searched! Item spawned: {spawnedItem.name}");
         }
         else
         {
-            Debug.Log("Nothing left to collect");
+            Debug.Log("Searched! But found nothing.");
         }
     }
 }
