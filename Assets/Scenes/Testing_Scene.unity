@@ -715,10 +715,6 @@ MonoBehaviour:
   sceneName: 
   warpInScene: 1
   warpTarget: {fileID: 555012904}
-  doorRenderer: {fileID: 0}
-  closedSprite: {fileID: 0}
-  openSprite: {fileID: 0}
-  doorCollider: {fileID: 0}
 --- !u!1 &314157854
 GameObject:
   m_ObjectHideFlags: 0
@@ -1029,10 +1025,6 @@ MonoBehaviour:
   sceneName: 
   warpInScene: 1
   warpTarget: {fileID: 908797461}
-  doorRenderer: {fileID: 0}
-  closedSprite: {fileID: 0}
-  openSprite: {fileID: 0}
-  doorCollider: {fileID: 0}
 --- !u!61 &450899881
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -3469,10 +3461,6 @@ MonoBehaviour:
   sceneName: Level01
   warpInScene: 0
   warpTarget: {fileID: 0}
-  doorRenderer: {fileID: 0}
-  closedSprite: {fileID: 0}
-  openSprite: {fileID: 0}
-  doorCollider: {fileID: 0}
 --- !u!1 &2110404787
 GameObject:
   m_ObjectHideFlags: 0

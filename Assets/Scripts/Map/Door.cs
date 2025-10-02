@@ -15,11 +15,11 @@ public class Door : MonoBehaviour, IInteractable
     public bool warpInScene = false;
     public Transform warpTarget;
 
-    [Header("Door Graphics")]
+    /*[Header("Door Graphics")]
     public SpriteRenderer doorRenderer;
     public Sprite closedSprite;
     public Sprite openSprite;
-    public Collider2D doorCollider;
+    public Collider2D doorCollider;*/
 
     private bool isOpen = false;
 
@@ -56,7 +56,7 @@ public class Door : MonoBehaviour, IInteractable
                 cameraFollow.ResetPositionImmediate();
             }
         }
-        else
+        /*else
         {
             isOpen = !isOpen;
             if (isOpen)
@@ -69,6 +69,6 @@ public class Door : MonoBehaviour, IInteractable
                 if (closedSprite != null) doorRenderer.sprite = closedSprite;
                 if (doorCollider != null) doorCollider.enabled = true;
             }
-        }
+        }*/
     }
 }
